@@ -19,7 +19,7 @@ html, body {
     align-items: center;
     width: 100%;
     background-image: url('./imgs/WCL.png');
-    background-position: center;
+    background-position: bottom;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
