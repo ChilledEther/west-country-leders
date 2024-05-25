@@ -18,12 +18,11 @@ html, body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    background-image: url('./imgs/bristol.jpg');
+    background-image: url('./imgs/WCL.png');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-
 }
 
 .header,
@@ -166,7 +165,6 @@ h2 {
     flex-grow: 1;
     flex-shrink: 1;
     flex: 1;
-    /* gap: 20px */
 }
 .venue-container {
     display: flex;
