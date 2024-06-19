@@ -12,17 +12,20 @@ html, body {
     flex-wrap: wrap;
 }
 
+body {
+    background-image: url('./imgs/WCL.png');
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 .container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    background-image: url('./imgs/WCL.png');
-    background-position: bottom;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 .header,
