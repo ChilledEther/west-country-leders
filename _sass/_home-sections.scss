@@ -1,182 +1,213 @@
 @use "variables" as *;
 @use "sass:color";
 
-// Floating Notice Board (Cartoony / Pinned Style)
-.notice-board-container {
-  position: absolute;
-  top: -25px;
-  left: -30px; 
-  z-index: 20;
-  width: 300px;
-  transform: rotate(-3deg);
-  filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.3));
-  transition: transform 0.3s ease;
+// ============================================
+// Board Game Theme Colors
+// ============================================
+$game-primary: #2d1b4e;      // Deep purple (game box feel)
+$game-secondary: #1a3a4a;    // Teal/slate blue
+$game-accent: #00d4aa;       // Vibrant teal glow
+$game-highlight: #ffd700;    // Gold for premium feel
+$game-text: #e8e0f0;         // Light lavender text
+$game-text-muted: #a89cc8;   // Muted purple text
 
-  &:hover {
-    transform: rotate(0deg) scale(1.02);
-    z-index: 25;
-  }
-  
-  @media (max-width: 1100px) {
-    // On mobile/tablet, it sits nicely above the hero card
-    position: relative; // Keeps it in flow
-    display: block; // Ensure it behaves like a block
-    top: auto;
-    left: auto;
-    right: auto;
-    width: 100%;
-    margin: 0 auto 30px; // Center and push down
-    text-align: center; // Center the card inside if overflow
-    transform: rotate(0deg); 
-    filter: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-}
+// ============================================
+// Next Event Banner - Inline, No Overlap
+// Styled as a board game night ticket
+// ============================================
 
-.notice-card {
-  background-color: #f7f1e3;
-  background-image: 
-    // Faint blue notepad lines
-    repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(173, 216, 230, 0.4) 27px, rgba(173, 216, 230, 0.4) 28px),
-    // Natural aging/stains
-    radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.04) 0%, transparent 40%),
-    // Paper texture
-    url("https://www.transparenttextures.com/patterns/cream-paper.png");
-  background-size: 100% 28px, 100% 100%, 100% 100%, auto;
-  background-repeat: repeat, no-repeat, no-repeat, repeat;
-  
-  padding: 35px 25px; // Increased padding to avoid text getting clipped
+.next-event-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  max-width: $content-max-width;
+  margin: 0 auto 20px;
+  padding: 14px 24px;
+  box-sizing: border-box;
   position: relative;
+  overflow: hidden;
   
-  // Torn/Damaged paper effect via clip-path
-  clip-path: polygon(
-    2% 2%, 15% 1%, 28% 3%, 42% 1%, 55% 2%, 70% 1%, 85% 3%, 98% 2%,
-    99% 15%, 97% 28%, 99% 42%, 98% 55%, 99% 70%, 97% 85%, 98% 97%,
-    85% 99%, 70% 97%, 55% 99%, 42% 98%, 28% 99%, 15% 97%, 2% 98%,
-    1% 85%, 3% 70%, 1% 55%, 2% 42%, 1% 28%, 3% 15%
+  // Board game table felt gradient
+  background: linear-gradient(
+    135deg,
+    $game-primary 0%,
+    color.mix($game-primary, $game-secondary, 60%) 50%,
+    $game-secondary 100%
   );
   
+  // Subtle hex grid pattern overlay (like game board)
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.03) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+    inset: 0;
+    opacity: 0.08;
+    background-image: 
+      radial-gradient(circle at 50% 50%, $game-accent 1px, transparent 1px);
+    background-size: 20px 20px;
     pointer-events: none;
   }
-}
-
-.notice-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.2rem;
-  color: $wood-medium;
-  cursor: pointer;
-  z-index: 100;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 1;
-    color: #e74c3c;
+  
+  // Glowing edge accent
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(
+      135deg,
+      rgba($game-accent, 0.5) 0%,
+      transparent 30%,
+      transparent 70%,
+      rgba($game-highlight, 0.3) 100%
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask: 
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
   }
-}  
-
-.notice-pin-wrapper {
-  position: absolute;
-  top: -12px; // Positioned relative to notice-board-container
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 30; // Above the clipped notice-card
-  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5));
+  
+  border: 2px solid rgba($game-accent, 0.3);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba($game-accent, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  
+  @media (max-width: $tablet-width) {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+  }
+  
+  @media (max-width: $phone-width) {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding: 16px 20px;
+  }
 }
 
-.notice-meeple-pin {
-  width: 32px;
-  height: 32px;
-  fill: #e74c3c;
-  display: block;
+.event-banner-icon {
+  font-size: 1.8rem;
+  color: $game-accent;
+  filter: drop-shadow(0 0 8px rgba($game-accent, 0.5));
+  animation: dice-glow 2s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 1;
+  
+  @keyframes dice-glow {
+    0% { filter: drop-shadow(0 0 6px rgba($game-accent, 0.4)); }
+    100% { filter: drop-shadow(0 0 12px rgba($game-accent, 0.7)); }
+  }
+  
+  @media (max-width: $phone-width) {
+    font-size: 1.6rem;
+  }
 }
 
-#notice-status {
-  text-align: center;
-  font-family: 'Permanent Marker', cursive, sans-serif; // Or just the display font
-  font-size: 1.4rem;
-  color: #c0392b;
-  margin: 0 0 15px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transform: rotate(-2deg);
-}
-
-.notice-content {
+.event-banner-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
   position: relative;
   z-index: 1;
 }
 
-.event-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  gap: 15px;
-}
-
-.event-info {
-  width: 100%;
-  
-  h3 {
-    margin-top: 0;
-    margin-bottom: 5px;
-    color: $wood-dark;
-    font-size: 1.3rem;
-    line-height: 1.2;
-    font-weight: 800;
-  }
-}
-
-.event-meta {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-  color: #666;
-  font-weight: 600;
-  
-  span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-}
-
-.event-button {
-  display: inline-block;
-  padding: 8px 15px;
-  margin-top: 10px;
-  background-color: $wood-dark;
-  color: #f7f1e3;
-  border-radius: 4px;
-  text-decoration: none !important;
-  font-weight: 700;
+.event-banner-label {
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: $game-accent;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  transition: all 0.2s;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba($game-accent, 0.5);
+  
+  @media (max-width: $phone-width) {
+    font-size: 0.7rem;
+  }
+}
+
+.event-banner-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: $game-text;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  
+  @media (max-width: $phone-width) {
+    font-size: 0.9rem;
+  }
+}
+
+.event-banner-date {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: $game-text-muted;
+  
+  @media (max-width: $phone-width) {
+    font-size: 0.75rem;
+  }
+}
+
+.event-banner-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, $game-accent 0%, color.adjust($game-accent, $lightness: -15%) 100%);
+  color: $game-primary !important;
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 
+    0 4px 0 color.adjust($game-accent, $lightness: -25%),
+    0 6px 20px rgba($game-accent, 0.3);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
   
   &:hover {
-    background-color: color.adjust($wood-dark, $lightness: 10%);
-    transform: scale(1.05);
+    background: linear-gradient(135deg, color.adjust($game-accent, $lightness: 5%) 0%, $game-accent 100%);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 0 color.adjust($game-accent, $lightness: -25%),
+      0 10px 30px rgba($game-accent, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 
+      0 2px 0 color.adjust($game-accent, $lightness: -25%),
+      0 4px 10px rgba($game-accent, 0.2);
+  }
+  
+  i {
+    font-size: 0.95rem;
+  }
+  
+  @media (max-width: $phone-width) {
+    padding: 8px 16px;
+    font-size: 0.75rem;
   }
 }
 
+// ============================================
 // Recent Updates Section
+// ============================================
+
 .home-updates-section {
   width: 95%;
   max-width: 1000px;

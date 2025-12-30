@@ -14,6 +14,11 @@
   left: 50%;
   transform: translateX(-50%);
   
+  // Flexbox for proper title/menu alignment
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
   // Enhanced Wooden Plank Effect (Single Horizontal Plank)
   background-color: $wood-medium;
   background-image: 
@@ -58,11 +63,10 @@
   .site-header {
     width: calc(100% - 20px);
     max-width: none;
-    border-radius: 20px; // Slightly less rounded on mobile to save space? Or keep consistent.
-    top: 10px; // On mobile, maybe keep the gap? 
-               // User asked "hit the top". Let's stick to top: 0 consistent behavior.
+    border-radius: 20px;
     top: 0;
     margin-top: 10px;
+    padding: 0 20px; // Reduced padding on mobile for more title space
   }
 }
 
@@ -81,17 +85,22 @@
 }
 
 .site-title {
-  font-size: 1.6rem;
+  font-size: clamp(0.95rem, 4vw, 1.6rem); // Responsive: min 0.95rem, grows with viewport, max 1.6rem
   font-weight: 900; // Extra bold for cartoony look
   line-height: $header-thickness;
   margin: 0;
-  float: left;
   letter-spacing: -0.03em;
+  white-space: nowrap; // Prevent title from wrapping
+  flex-shrink: 1; // Allow shrinking if needed to fit menu button
+  min-width: 0; // Allow shrinking below content size
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu-list {
   line-height: $header-thickness;
-  float: right;
+  display: flex;
+  align-items: center;
 }
 
 .menu-link {
@@ -107,6 +116,9 @@
 
 // Use nav-breakpoint width for breakpoint to handle earlier switch to mobile menu
 @media (min-width: $nav-breakpoint) {
+  .dropdown {
+    display: none; // Hide entire dropdown container on desktop
+  }
   .dropbtn {
     display: none;
   }
@@ -120,25 +132,25 @@
     display: none;
   }
   
-  .site-title {
-    font-size: 1.2rem;
-  }
+  // Note: .site-title now uses clamp() for responsive sizing, no fixed override needed
 
   .dropbtn {
     background-color: transparent;
     color: $brand-color;
-    padding: 0 10px;
+    padding: 0 5px; // Reduced padding for small screens
     height: $header-thickness;
-    font-size: 1.5rem; // Hamburger icon size
+    font-size: 1.3rem; // Slightly smaller icon
     border: none;
     cursor: pointer;
     line-height: $header-thickness;
+    flex-shrink: 0; // Never shrink the menu button
   }
   
   .dropdown {
     position: relative;
-    display: block;
-    float: right;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; // Never shrink - always show menu button
   }
   
   .dropdown-content {
