@@ -1,0 +1,75 @@
+---
+layout: default
+---
+
+<div class="page-events-content">
+  <h1>{{ page.title }}</h1>
+
+  <div style="max-width: 800px; margin: 0 auto;">
+    
+    <!-- Info Grid (Reusing the nice Venues style if possible, or recreating it) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; padding: 20px; border-top: 1px solid rgba(110, 76, 47, 0.15); border-bottom: 1px solid rgba(110, 76, 47, 0.15);">
+       <div style="display: flex; align-items: center; gap: 12px; color: #4d2d18;">
+         <div style="width: 40px; height: 40px; background: rgba(212, 167, 106, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+           <i class="fa-solid fa-calendar-days" style="color: #d4a76a;"></i>
+         </div>
+         <div style="display: flex; flex-direction: column;">
+           <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.7;">Date</span>
+           <span style="font-weight: 600;">{{ page.date | date: "%B %d, %Y" }}</span>
+         </div>
+       </div>
+
+       <div style="display: flex; align-items: center; gap: 12px; color: #4d2d18;">
+         <div style="width: 40px; height: 40px; background: rgba(212, 167, 106, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+           <i class="fa-solid fa-clock" style="color: #d4a76a;"></i>
+         </div>
+         <div style="display: flex; flex-direction: column;">
+           <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.7;">Time</span>
+           <span style="font-weight: 600;">{{ page.time }}</span>
+         </div>
+       </div>
+
+       <div style="display: flex; align-items: center; gap: 12px; color: #4d2d18;">
+         <div style="width: 40px; height: 40px; background: rgba(212, 167, 106, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+           <i class="fa-solid fa-map-pin" style="color: #d4a76a;"></i>
+         </div>
+         <div style="display: flex; flex-direction: column;">
+           <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.7;">Venue</span>
+           <span style="font-weight: 600;">{{ page.venue }}</span>
+         </div>
+       </div>
+    </div>
+
+    <!-- Registration Button Logic -->
+    {% if page.signup_url %}
+      {% assign now_ts = site.time | date: '%s' | plus: 0 %}
+      {% assign start_ts = page.reg_start | date: '%s' | plus: 0 %}
+      {% assign end_ts = page.reg_end | date: '%s' | plus: 0 %}
+      {% assign show_signup = false %}
+      
+      {% if page.reg_start and page.reg_end %}
+        {% if now_ts >= start_ts and now_ts <= end_ts %}
+          {% assign show_signup = true %}
+        {% endif %}
+      {% else %}
+        {% assign show_signup = true %}
+      {% endif %}
+
+      {% if show_signup %}
+        <div style="text-align: center; margin-bottom: 40px;">
+          <a href="{{ page.signup_url }}" target="_blank" class="registration-button">
+            <i class="fa-solid fa-pencil"></i> Register Now
+          </a>
+          <div class="registration-deadline">
+            <i class="fa-solid fa-clock"></i> Registration closes {{ page.reg_end | date: "%d %b" }}
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <article style="font-size: 1.1rem; line-height: 1.7; color: #333;">
+      {{ content }}
+    </article>
+
+  </div>
+</div>

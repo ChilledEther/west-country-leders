@@ -1,36 +1,24 @@
----
-layout: default
-title: Posts
-permalink: /posts/
-pagination:
-  enabled: true
----
+<div id="posts-grid" class="events-grid">
+  {% for post in paginator.posts %}
+    {% include post-card.html %}
+  {% endfor %}
+</div>
 
-<div class="page-content">
-  <h1 style="margin-bottom: 30px;">Club Updates & Tournaments</h1>
+<div id="infinite-scroll-status" class="infinite-scroll-status" style="display: none;">
+  <div class="pagination-button" style="cursor: default; opacity: 0.7;">
+    <i class="fa fa-spinner fa-spin"></i> Loading more updates...
+  </div>
+</div>
+
+<!-- Traditional Pagination Fallback -->
+<div id="pagination-fallback" class="pagination infinite-scroll-fallback">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path | relative_url }}" class="pagination-button pagination-active">← Newer Updates</a>
+  {% endif %}
   
-  <div id="posts-grid" class="posts-grid">
-    {% for post in paginator.posts %}
-      {% include post-card.html %}
-    {% endfor %}
-  </div>
-
-  <div id="infinite-scroll-status" style="text-align: center; margin-top: 40px; display: none;">
-    <div class="pagination-button" style="cursor: default; opacity: 0.7;">
-      <i class="fa fa-spinner fa-spin"></i> Loading more updates...
-    </div>
-  </div>
-
-  <!-- Traditional Pagination Fallback -->
-  <div id="pagination-fallback" class="pagination" style="text-align: center; margin-top: 40px;">
-    {% if paginator.previous_page %}
-      <a href="{{ paginator.previous_page_path | relative_url }}" class="pagination-button pagination-active">← Newer Updates</a>
-    {% endif %}
-    
-    {% if paginator.next_page %}
-      <a id="next-page-link" href="{{ paginator.next_page_path | relative_url }}" class="pagination-button pagination-active">Older Updates →</a>
-    {% endif %}
-  </div>
+  {% if paginator.next_page %}
+    <a id="next-page-link" href="{{ paginator.next_page_path | relative_url }}" class="pagination-button pagination-active">Older Updates →</a>
+  {% endif %}
 </div>
 
 <script>
@@ -64,7 +52,8 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(data => {
         var parser = new DOMParser();
         var doc = parser.parseFromString(data, 'text/html');
-        var newPosts = doc.querySelectorAll('#posts-grid .post-card');
+        // Updated selector to match new card wrapper class
+        var newPosts = doc.querySelectorAll('#posts-grid .event-card-wrapper');
         
         // Append new posts to the current grid
         newPosts.forEach(function(post) {

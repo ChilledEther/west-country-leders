@@ -5,7 +5,26 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
-  padding: 20px 0;
+  // Removed bottom padding to rely on content-wrapper for consistent 40px gap
+  padding: 20px 0 0 0; 
+}
+
+// Styles for Infinite Scroll elements to ensure proper spacing
+.infinite-scroll-status,
+.infinite-scroll-fallback {
+  text-align: center;
+  
+  // Collapse completely when empty to avoid whitespace issues
+  &:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  // Only add margin if they have content and are displayed
+  &:not(:empty) {
+    margin-top: 30px; // Match grid gap
+  }
 }
 
 .post-card {
@@ -36,13 +55,18 @@
 .post-card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  // Fixed Aspect Ratio (16:9) to prevent weird cropping on different widths
+  padding-top: 56.25%; 
+  height: 0;
   overflow: hidden;
   background-color: $wood-light;
   border-bottom: 2px solid rgba($parchment-border, 0.2);
 }
 
 .post-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;

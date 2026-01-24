@@ -8,13 +8,18 @@
   width: 100%;
   max-width: $container-width;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0; // Remove constricting padding to allow full alignment with header
   box-sizing: border-box;
+
+  @media (max-width: $header-breakpoint) {
+    // Match header/footer mobile behavior exactly
+    width: calc(100% - 20px);
+  }
 }
 
 .content-wrapper {
-  padding-top: $header-thickness + 80px; // Increased padding to account for fixed header + gap
-  padding-bottom: 60px;
+  padding-top: $header-thickness + 60px; // Results in ~40px visual gap (124px total - 84px header)
+  padding-bottom: 40px; // Matches the 40px visual gap at the top
   margin: 0 auto;
   display: block;
   width: 100%;
@@ -47,13 +52,14 @@
 
 // Optimization for Front Page / Hero layout
 .layout-front-page {
-  .content-wrapper {
-    padding-top: $header-thickness + 80px; // 20px (header top) + 64px (header) + 60px (gap)
-    padding-bottom: 30px; // Total 60px gap to footer below
-  }
+  // Inherit standard spacing from .content-wrapper for consistency
+  // .content-wrapper {
+  //   padding-top: ...
+  //   padding-bottom: ...
+  // }
   
   .footer {
-    margin-top: 30px; 
+    margin-top: 0; 
   }
 
   @media (max-width: $tablet-width) {
@@ -61,4 +67,32 @@
       padding-top: $header-thickness + 50px; // Match other pages on mobile
     }
   }
+}
+
+/*
+  Header Fade Overlay
+  Creates a fixed bridge at the top of the viewport that matches the site background.
+  Content scrolling under the header will hit this overlay and fade out into the background.
+*/
+.site-header-fade-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px; // Reduced from 120px
+  z-index: 999; // Just below site-header (1000)
+  pointer-events: none;
+  
+  // Exactly match body background settings from _base.scss
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("../img-core/wcl-tin.webp");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+
+  // Mask defines the fade range
+  // Solid behind the header (~60px to account for top spacing)
+  // Ends at 95px, which aligns perfectly with the header's bottom edge (84px-91px)
+  -webkit-mask-image: linear-gradient(to bottom, black 0, black 60px, transparent 95px);
+  mask-image: linear-gradient(to bottom, black 0, black 60px, transparent 95px);
 }

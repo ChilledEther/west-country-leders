@@ -1,5 +1,5 @@
-$base-font-family: "Inter", "Roboto", sans-serif;
-$body-font-family: "Inter", "Roboto", sans-serif;
+$base-font-family: "Quicksand", "Inter", "Roboto", sans-serif;
+$body-font-family: "Quicksand", "Inter", "Roboto", sans-serif;
 $code-font-family: "Source Code Pro", monospace;
 
 $brand-color: #2c3e50; // Dark slate
@@ -9,8 +9,8 @@ $background-color: #f8f9fa;
 
 $container-width: 1200px;
 $header-breakpoint: $container-width + 40px;
-$nav-breakpoint: 940px; // Earlier switch to mobile menu to prevent wrapping
-$content-max-width: 1000px; // Unified width for pages
+$nav-breakpoint: 1040px; // Increased to prevent desktop menu wrapping
+$content-max-width: $container-width; // Unified width matching container/header
 $tablet-width: 768px;
 $phone-width: 480px;
 

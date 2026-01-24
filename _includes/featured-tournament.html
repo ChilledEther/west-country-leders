@@ -1,0 +1,85 @@
+{% assign now_unix = site.time | date: "%Y%m%d" | plus: 0 %}
+{% assign now_ts = site.time | date: '%s' | plus: 0 %}
+{% assign all_tournaments = site.tournaments | sort: "date" %}
+
+{% assign open_registrations = "" | split: "" %}
+{% assign next_upcoming = nil %}
+
+{% for t in all_tournaments %}
+  {% assign t_date = t.date | date: "%Y%m%d" | plus: 0 %}
+  {% if t_date >= now_unix %}
+    {% if next_upcoming == nil %}
+      {% assign next_upcoming = t %}
+    {% endif %}
+    
+    {% if t.signup_url %}
+      {% assign start_ts = t.reg_start | date: '%s' | plus: 0 %}
+      {% assign end_ts = t.reg_end | date: '%s' | plus: 0 %}
+      
+      {% assign is_open = false %}
+      {% if t.reg_start and t.reg_end %}
+        {% if now_ts >= start_ts and now_ts <= end_ts %}
+          {% assign is_open = true %}
+        {% endif %}
+      {% else %}
+        {% assign is_open = true %}
+      {% endif %}
+      
+      {% if is_open %}
+        {% assign open_registrations = open_registrations | push: t %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Decide which tournaments to show {% endcomment %}
+{% assign display_list = "" | split: "" %}
+{% if open_registrations.size > 0 %}
+  {% assign display_list = open_registrations %}
+{% elsif next_upcoming %}
+  {% assign display_list = display_list | push: next_upcoming %}
+{% endif %}
+
+{% if display_list.size > 0 %}
+<div class="featured-tournaments-group">
+  <a href="{{ '/tournaments/' | relative_url }}" class="card-header-badge badge-tournament-group" style="text-decoration: none;">
+    <i class="fa-solid fa-trophy"></i> Upcoming Tournaments
+  </a>
+
+  <div class="tournament-items">
+    {% for featured in display_list %}
+      <div class="tournament-item">
+        <div class="item-main">
+          <h3 class="item-title"><a href="{{ featured.url | relative_url }}">{{ featured.title }}</a></h3>
+          <div class="item-meta">
+            <i class="fa-solid fa-calendar-day"></i>
+            <span>{{ featured.date | date: "%b %d" }}</span>
+            <span class="meta-sep">•</span>
+            <i class="fa-solid fa-location-dot"></i>
+            <span>{{ featured.venue }}</span>
+          </div>
+        </div>
+
+        <div class="item-actions">
+          {% assign start_ts = featured.reg_start | date: '%s' | plus: 0 %}
+          {% assign end_ts = featured.reg_end | date: '%s' | plus: 0 %}
+          {% assign is_open = false %}
+          {% if featured.signup_url %}
+            {% if featured.reg_start and featured.reg_end %}
+              {% if now_ts >= start_ts and now_ts <= end_ts %}{% assign is_open = true %}{% endif %}
+            {% else %}
+              {% assign is_open = true %}
+            {% endif %}
+          {% endif %}
+
+          {% if is_open %}
+            <a href="{{ featured.signup_url }}" class="tournament-action-button active" target="_blank">Sign up →</a>
+          {% else %}
+            <a href="{{ featured.url | relative_url }}" class="tournament-action-button">Details</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

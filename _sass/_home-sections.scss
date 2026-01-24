@@ -12,195 +12,362 @@ $game-text: #e8e0f0;         // Light lavender text
 $game-text-muted: #a89cc8;   // Muted purple text
 
 // ============================================
-// Next Event Banner - Inline, No Overlap
-// Styled as a board game night ticket
+// Upcoming Tournaments Section
 // ============================================
 
-.next-event-banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
+.featured-tournaments-group {
   width: 100%;
   max-width: $content-max-width;
   margin: 0 auto 20px;
-  padding: 14px 24px;
   box-sizing: border-box;
+  background-color: $parchment-base;
+  border: 4px solid $wood-border;
+  border-radius: 16px;
+  overflow: visible;
+  box-shadow: none !important;
   position: relative;
-  overflow: hidden;
-  
-  // Board game table felt gradient
-  background: linear-gradient(
-    135deg,
-    $game-primary 0%,
-    color.mix($game-primary, $game-secondary, 60%) 50%,
-    $game-secondary 100%
-  );
-  
-  // Subtle hex grid pattern overlay (like game board)
-  &::before {
-    content: '';
+  padding: 20px 0 0;
+
+  .badge-tournament-group {
+    background-color: #d4af37;
+    color: #4d2d18;
     position: absolute;
-    inset: 0;
-    opacity: 0.08;
-    background-image: 
-      radial-gradient(circle at 50% 50%, $game-accent 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 16px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    letter-spacing: 1px;
+    border: 3px solid $wood-border;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+    z-index: 10;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    width: max-content;
+    max-width: 90vw;
+
+    @media (max-width: $phone-width) {
+      padding: 5px 24px;
+      letter-spacing: 0.5px;
+    }
+
+    i {
+      margin-right: 6px;
+    }
+
+    &:hover {
+      background-color: #f1c40f;
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 2px 4px 0 rgba(0,0,0,0.2);
+    }
   }
-  
-  // Glowing edge accent
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    padding: 2px;
-    background: linear-gradient(
-      135deg,
-      rgba($game-accent, 0.5) 0%,
-      transparent 30%,
-      transparent 70%,
-      rgba($game-highlight, 0.3) 100%
-    );
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask: 
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+
+  .tournament-items {
+    padding: 12px 24px 6px;
+    box-sizing: border-box;
+
+    @media (max-width: $tablet-width) {
+      padding: 12px 16px 6px;
+    }
   }
-  
-  border: 2px solid rgba($game-accent, 0.3);
-  border-radius: 12px;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba($game-accent, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  @media (max-width: $tablet-width) {
+
+  .tournament-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
+    padding: 8px 12px;
+    margin: 0 -12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba($wood-border, 0.1);
     gap: 12px;
-    padding: 12px 18px;
+    text-align: left;
+    transition: background 0.2s ease;
+    border-radius: 8px;
+
+    &:hover {
+      background: rgba($wood-light, 0.3);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .item-main {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-weight: 800;
+      font-size: clamp(1rem, 3vw, 1.1rem);
+      margin: 0;
+      line-height: 1.4;
+      
+      a {
+        color: $wood-border;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+      font-weight: 700;
+      color: $wood-medium;
+      font-style: italic;
+      flex-wrap: wrap;
+
+      i {
+        color: $wood-medium;
+        font-size: 0.75rem;
+      }
+    }
+
+    .tournament-action-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 20px;
+      background: rgba(0, 0, 0, 0.05);
+      color: $wood-medium !important;
+      border: 3px solid $wood-medium;
+      border-radius: 4px;
+      font-weight: 900;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      text-decoration: none !important;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+
+      &:hover {
+        background: rgba($wood-medium, 0.15);
+        color: $wood-dark !important;
+        border-color: $wood-dark;
+      }
+
+      &.active {
+        background-color: #d4af37;
+        color: #4d2d18 !important;
+        border-color: #927521;
+        box-shadow: 2px 2px 0 #927521;
+
+        &:hover {
+          background-color: #f1c40f;
+          transform: translateY(-1px);
+          box-shadow: 3px 3px 0 #927521;
+        }
+      }
+    }
   }
-  
-  @media (max-width: $phone-width) {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-    padding: 16px 20px;
+
+  @media (max-width: $tablet-width) {
+    .tournament-item {
+      display: block;
+      padding: 16px 12px;
+      text-align: center;
+      
+      .item-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 4px;
+      }
+
+      .item-title {
+        margin-bottom: 0;
+        white-space: normal;
+      }
+
+      .item-meta {
+        justify-content: center;
+      }
+
+      .item-actions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .tournament-action-button {
+          width: auto;
+        }
+      }
+    }
   }
 }
 
-.event-banner-icon {
-  font-size: 1.8rem;
-  color: $game-accent;
-  filter: drop-shadow(0 0 8px rgba($game-accent, 0.5));
-  animation: dice-glow 2s ease-in-out infinite alternate;
+// ============================================
+// Next Gathering Card
+// ============================================
+
+.next-gathering-card {
+  margin: 0 auto 20px;
+  width: 100%;
+  max-width: $content-max-width;
+  box-sizing: border-box;
+  background: #f4f0fa;
+  border: 4px solid $wood-border;
+  border-radius: 16px;
+  display: block;
   position: relative;
-  z-index: 1;
+  overflow: visible;
+  box-shadow: none !important;
   
-  @keyframes dice-glow {
-    0% { filter: drop-shadow(0 0 6px rgba($game-accent, 0.4)); }
-    100% { filter: drop-shadow(0 0 12px rgba($game-accent, 0.7)); }
-  }
-  
-  @media (max-width: $phone-width) {
-    font-size: 1.6rem;
-  }
-}
+  .badge-gathering {
+    background-color: #5d4485;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    letter-spacing: 1px;
+    border: 3px solid $wood-border;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+    z-index: 10;
+    border-radius: 4px;
+    color: white;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    width: max-content;
+    max-width: 90vw;
 
-.event-banner-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
+    @media (max-width: $phone-width) {
+      padding: 3px 8px;
+      letter-spacing: 0.5px;
+    }
 
-.event-banner-label {
-  font-weight: 800;
-  font-size: 0.8rem;
-  color: $game-accent;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 10px rgba($game-accent, 0.5);
-  
-  @media (max-width: $phone-width) {
-    font-size: 0.7rem;
+    i {
+      margin-right: 6px;
+      color: #e8e0f0;
+    }
   }
-}
 
-.event-banner-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: $game-text;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  
-  @media (max-width: $phone-width) {
-    font-size: 0.9rem;
-  }
-}
+  .card-content {
+    padding: 30px 24px 14px;
 
-.event-banner-date {
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: $game-text-muted;
-  
-  @media (max-width: $phone-width) {
-    font-size: 0.75rem;
+    @media (max-width: $tablet-width) {
+      padding: 35px 16px 16px;
+    }
   }
-}
 
-.event-banner-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  background: linear-gradient(135deg, $game-accent 0%, color.adjust($game-accent, $lightness: -15%) 100%);
-  color: $game-primary !important;
-  border-radius: 8px;
-  text-decoration: none !important;
-  font-weight: 800;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 
-    0 4px 0 color.adjust($game-accent, $lightness: -25%),
-    0 6px 20px rgba($game-accent, 0.3);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-  
-  &:hover {
-    background: linear-gradient(135deg, color.adjust($game-accent, $lightness: 5%) 0%, $game-accent 100%);
-    transform: translateY(-2px);
-    box-shadow: 
-      0 6px 0 color.adjust($game-accent, $lightness: -25%),
-      0 10px 30px rgba($game-accent, 0.4);
+  .gathering-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+    text-align: left;
+    box-sizing: border-box;
+
+    @media (max-width: $tablet-width) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
   }
-  
-  &:active {
-    transform: translateY(2px);
-    box-shadow: 
-      0 2px 0 color.adjust($game-accent, $lightness: -25%),
-      0 4px 10px rgba($game-accent, 0.2);
+
+  .gathering-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+
+    @media (max-width: $tablet-width) {
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    
+    .event-title {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      margin: 0;
+      color: #3b2b5a;
+      line-height: 1.4;
+      word-break: break-word;
+    }
   }
-  
-  i {
-    font-size: 0.95rem;
+
+  .gathering-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6a5a8a;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    font-style: italic;
+    flex-wrap: wrap;
+
+    @media (max-width: $tablet-width) {
+      justify-content: center;
+    }
+    
+    i {
+      color: #8e7caf;
+      font-size: 0.8rem;
+    }
   }
-  
-  @media (max-width: $phone-width) {
-    padding: 8px 16px;
-    font-size: 0.75rem;
+
+  .gathering-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background-color: #5d4485;
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    border: 3px solid #2d1b4e;
+    box-shadow: 2px 2px 0 #2d1b4e;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    
+    &:hover {
+      background-color: #7b5eb1;
+      transform: translateY(-1px);
+      box-shadow: 3px 3px 0 #2d1b4e;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 1px 1px 0 #2d1b4e;
+    }
+
+    i {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: $tablet-width) {
+      width: auto;
+      min-width: 160px; // Ensure a nice minimum presence
+      margin-top: 2px;
+    }
   }
 }
 
@@ -209,8 +376,8 @@ $game-text-muted: #a89cc8;   // Muted purple text
 // ============================================
 
 .home-updates-section {
-  width: 95%;
-  max-width: 1000px;
+  width: 100%;
+  max-width: none;
   margin: 80px auto 40px;
   
   .section-title {

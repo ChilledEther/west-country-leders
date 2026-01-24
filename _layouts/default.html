@@ -2,12 +2,15 @@
 <html>
   {% include head.html %}
   <body class="layout-{{ page.layout | default: 'default' }}">
+    <div class="site-header-fade-overlay"></div>
+    {% include header.html %}
+    
     <div class="container">
-      {% include header.html %}
       <div class="content-wrapper">
         {{ content }}
       </div>
-      {% include footer.html %}
     </div>
+    
+    {% include footer.html %}
   </body>
 </html>

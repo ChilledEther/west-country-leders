@@ -1,0 +1,114 @@
+<!-- Next Gathering Card - Styled consistently with venues and posts -->
+<div class="next-gathering-container">
+  <div class="next-gathering-card">
+    <div class="card-header-badge badge-gathering">
+      <i class="fa-solid fa-dice-d20"></i> Next Gathering
+    </div>
+  
+  <div class="card-content">
+    <div class="gathering-layout">
+      <div class="gathering-info">
+        <div id="event-banner-title" class="event-title">See what's coming up!</div>
+        <div class="gathering-meta">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span id="event-banner-date">Click Events for details →</span>
+        </div>
+      </div>
+      
+      <div class="gathering-actions">
+        <a href="{{ '/events' | relative_url }}" class="gathering-button">
+          <span>View Events</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- NoScript fallback -->
+    <noscript>
+      <div class="gathering-layout">
+        <div class="gathering-info">
+          <div class="event-title">Join our next game night!</div>
+          <div class="gathering-meta">View all events for details.</div>
+        </div>
+        <div class="gathering-actions">
+          <a href="{{ '/events' | relative_url }}" class="gathering-button">View Events</a>
+        </div>
+      </div>
+    </noscript>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const calendarEmail = "westcountryleders@gmail.com";
+    const icalUrl = "https://calendar.google.com/calendar/ical/" + encodeURIComponent(calendarEmail) + "/public/basic.ics";
+    const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(icalUrl);
+    
+    const titleEl = document.getElementById('event-banner-title');
+    const dateEl = document.getElementById('event-banner-date');
+
+    function parseIcsDate(icsDate) {
+      if (!icsDate) return null;
+      const val = icsDate.trim();
+      const year = val.substring(0, 4);
+      const month = parseInt(val.substring(4, 6)) - 1;
+      const day = val.substring(6, 8);
+      const hour = val.includes('T') ? val.substring(9, 11) : 0;
+      const min = val.includes('T') ? val.substring(11, 13) : 0;
+      return new Date(Date.UTC(year, month, day, hour, min));
+    }
+
+    function formatShortDate(date) {
+      return date.toLocaleDateString('en-GB', { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    fetch(proxyUrl)
+      .then(function(res) { 
+        if (!res.ok) throw new Error('Proxy error');
+        return res.text(); 
+      })
+      .then(function(content) {
+        if (!content || !content.includes('BEGIN:VEVENT')) {
+          return;
+        }
+
+        const unfoldedContent = content.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+        const events = [];
+        const chunks = unfoldedContent.split('BEGIN:VEVENT');
+        const now = new Date();
+
+        for (let i = 1; i < chunks.length; i++) {
+          const chunk = chunks[i];
+          const summary = (chunk.match(/SUMMARY(?:;[^:]*)?:([^\r\n]+)/) || [])[1];
+          const dtstart = (chunk.match(/DTSTART(?:;[^:]*)?:([^\r\n]+)/) || [])[1];
+
+          if (dtstart) {
+            const start = parseIcsDate(dtstart);
+            if (start && start >= now) {
+              events.push({
+                title: (summary || "Event").trim().replace(/\\/g, ''),
+                start: start
+              });
+            }
+          }
+        }
+
+        events.sort(function(a, b) { return a.start - b.start; });
+
+        if (events.length > 0) {
+          const next = events[0];
+          if (titleEl) titleEl.textContent = next.title;
+          if (dateEl) dateEl.textContent = formatShortDate(next.start);
+        }
+      })
+      .catch(function(err) {
+        console.error("Calendar fetch error:", err);
+      });
+  })();
+</script>
